@@ -1,14 +1,20 @@
-Summary: Naemon Livestatus Eventbroker Module
-Name: naemon-livestatus
-Version: 1.4.2
-Release: 15.31%{?dist}
-License: GPL-2.0-only
-Group: Applications/System
-URL: https://www.naemon.io/
-Packager: Naemon Core Development Team <naemon-dev@monitoring-lists.org>
-Vendor: Naemon Core Development Team
-Source0: http://labs.consol.de/naemon/download/naemon-livestatus-%{version}.tar.gz
-BuildRoot: %{_tmppath}/naemon-%{version}-%{release}
+%global debug_package %{nil}
+
+Summary:       Naemon Livestatus Eventbroker Module
+Name:          naemon-livestatus
+Version:       1.4.2
+Release:       1%{?dist}
+License:       GPL-2.0-only
+Group:         bofh42/addon/naemon
+
+URL:           https://www.naemon.io/
+Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum 48646a5d7186a0d5cddd43775337ee9c
+
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
+
+BuildRequires: xxhash
 BuildRequires: naemon-devel
 BuildRequires: autoconf
 BuildRequires: automake
@@ -26,6 +32,8 @@ database.
 
 
 %prep
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
+
 %setup -q
 
 
@@ -114,6 +122,10 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/livestatus.cfg
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+- reset release number to 1 for my own repo
+- use git source url and save xxh128 hash in the spec file and check it
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-15
 - added optional macro dist to release
 
