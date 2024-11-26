@@ -8,24 +8,29 @@
 %define apachedir httpd
 %endif
 
-Summary: Open Source Host, Service And Network Monitoring Program
-Name: naemon
-Version: 1.4.2
-Release: 14.31%{?dist}
-License: GPL-2.0-only
-BuildArch: noarch
-Group: Applications/System
-URL: https://www.naemon.io/
-Packager: Naemon Core Development Team <naemon-dev@monitoring-lists.org>
-Vendor: Naemon Core Development Team
-Source0: http://labs.consol.de/naemon/download/%{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Summary:       Open Source Host, Service And Network Monitoring Program
+Name:          naemon
+Version:       1.4.2
+Release:       1%{?dist}
+License:       GPL-2.0-only
+BuildArch:     noarch
+Group:         bofh42/addon/naemon
+
+URL:           https://www.naemon.io/
+Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum a1418f64e437460997a9a9ebff97c069
+
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
+
+BuildRequires: xxhash
 %if %{defined suse_version}
 BuildRequires: apache2
 %else
 BuildRequires: httpd
 %endif
 BuildRequires: make
+
 Requires: %{name}-core            >= %{version}
 Requires: %{name}-livestatus      >= %{version}
 Requires: %{name}-vimvault        >= 1.4.2
@@ -65,6 +70,8 @@ Obsoletes: naemon-thruk-libs
 This package contains the thruk gui for %{name}.
 
 %prep
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
+
 %setup -q
 
 %build
@@ -149,6 +156,10 @@ exit 0
 %endif
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+- reset release number to 1 for my own repo
+- use git source url and save xxh128 hash in the spec file and check it
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-14
 - added optional macro dist to release
 - added BuildRequires make
