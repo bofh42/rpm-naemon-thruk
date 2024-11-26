@@ -1,23 +1,30 @@
+%global debug_package %{nil}
+
 %if ! %{defined _fillupdir}
 %define _fillupdir %{_localstatedir}/adm/fillup-templates
 %endif
 
 Name:          mod_gearman
 Version:       5.1.4
-Release:       12.11%{?dist}
+Release:       1%{?dist}
 License:       GPL-2.0-or-later
-Packager:      Sven Nierlein <sven.nierlein@consol.de>
-Vendor:        Labs Consol
+Group:         bofh42/addon/naemon
+
 URL:           http://labs.consol.de/nagios/mod-gearman/
-Source0:       mod_gearman-%{version}.tar.gz
-Group:         System/Monitoring
+Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum 7d2e9fab83b97e4e5920d546593b5d23
+
 Summary:       Mod-Gearman module for Naemon
+
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
 Requires:      perl-interpreter
 %else
 Requires:      perl
 %endif
 Requires:      libgearman, logrotate, openssl
+
+BuildRequires: xxhash
 BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
 BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
 BuildRequires: libgearman-devel
@@ -40,6 +47,8 @@ The counterpart is one or more worker clients for the checks itself. They can
 be bound to host and servicegroups.
 
 %prep
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
+
 %setup -q
 
 %build
@@ -74,7 +83,6 @@ touch %{buildroot}%{_sysconfdir}/sysconfig/mod-gearman-worker
 
 # remove SystemV init-script
 %{__rm} -f %{buildroot}%{_initrddir}/mod-gearman-worker
-
 
 
 %pre
@@ -147,6 +155,10 @@ getent passwd naemon >/dev/null || \
 %docdir %{_defaultdocdir}
 
 %changelog
+* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-1
+- reset release number to 1 for my own repo
+- use git source url and save xxh128 hash in the spec file and check it
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-12
 - added optional macro dist to release
 - Requires perl-interpreter for rhel >= 8 or fedora >= 28 (200 dependencies less)
