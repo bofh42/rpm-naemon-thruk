@@ -1,16 +1,22 @@
+%global debug_package %{nil}
+
 %define logmsg logger -t naemon/rpm
 
-Summary: Open Source Host, Service And Network Monitoring Program
-Name: naemon-core
-Version: 1.4.2
-Release: 19.31%{?dist}
-License: GPL-2.0-only
-Group: Applications/System
-URL: https://www.naemon.io/
-Packager: Naemon Core Development Team <naemon-dev@monitoring-lists.org>
-Vendor: Naemon Core Development Team
-Source0: %{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Summary:       Open Source Host, Service And Network Monitoring Program
+Name:          naemon-core
+Version:       1.4.2
+Release:       1%{?dist}
+License:       GPL-2.0-only
+Group:         bofh42/addon/naemon
+
+URL:           https://www.naemon.io/
+Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum 3d76de29c7aec0ca9035a63fa56d7b8a
+
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
+
+BuildRequires: xxhash
 BuildRequires: gperf
 BuildRequires: logrotate
 BuildRequires: autoconf
@@ -104,6 +110,8 @@ Naemon.
 
 
 %prep
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
+
 %setup -q
 
 %build
@@ -345,6 +353,10 @@ exit 0
 %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+- reset release number to 1 for my own repo
+- use git source url and save xxh128 hash in the spec file and check it
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-19
 - added optional macro dist to release
 - changed source to naemon-core and redownloaded tar.gz from github
