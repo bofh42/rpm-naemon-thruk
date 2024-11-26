@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+
 %define         libversion 8
 %if ! %{defined _fillupdir}
 %define _fillupdir %{_localstatedir}/adm/fillup-templates
@@ -5,15 +7,20 @@
 
 Name:           gearmand
 Version:        1.1.19.1
-Release:        9.41%{?dist}
+Release:        1%{?dist}
 Summary:        A distributed job system
-
 License:        BSD-3-Clause
-URL:            http://www.gearman.org
-Source0:        gearmand-%{version}.tar.gz
-Source1:        gearmand.sysconfig
-Source2:        gearmand.service
+Group:          bofh42/addon/naemon
 
+URL:            http://www.gearman.org
+Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
+# key copied from https://fewbar.com/clint-byrum-public-key/
+Source2:        gearman-clint-byrum.asc
+Source3:        gearmand.sysconfig
+Source4:        gearmand.service
+
+BuildRequires:  gnupg2
 BuildRequires:  gcc-c++
 BuildRequires:  chrpath
 BuildRequires:  libuuid-devel
@@ -28,6 +35,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  systemd
 BuildRequires:  make
+
 Requires:       procps
 Requires:       sqlite
 Requires:       libevent >= 1.4
@@ -73,6 +81,10 @@ Obsoletes:      libgearman-1.0-devel < %{version}-%{release}
 This package contains necessary header files for Gearman development.
 
 %prep
+gpg2 --dearmor < %{SOURCE2} >%{name}-%{version}.gpg
+gpg2 --quiet --keyring ./%{name}-%{version}.gpg --verify --trust-model always %{SOURCE1} %{SOURCE0}
+rm ./%{name}-%{version}.gpg
+
 %setup -q
 
 %build
@@ -93,14 +105,14 @@ make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
 chrpath --delete %{buildroot}%{_bindir}/gearman
 %if %{defined suse_version}
-install -D -m 0644 %{SOURCE1} %{buildroot}%{_fillupdir}/sysconfig.gearmand
+install -D -m 0644 %{SOURCE3} %{buildroot}%{_fillupdir}/sysconfig.gearmand
 %else
-install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
+install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 %endif
 
 # install systemd unit file
 mkdir -p %{buildroot}%{_unitdir}
-install -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.service
+install -m 0644 %{SOURCE4} %{buildroot}%{_unitdir}/%{name}.service
 
 
 %pre
@@ -179,6 +191,11 @@ exit 0
 
 
 %changelog
+* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-1
+- reset release number to 1 for my own repo
+- source now with git url
+- added gpg key and source check
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-9
 - added optional macro dist to release
 
