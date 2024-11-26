@@ -1,7 +1,7 @@
 Summary: Naemon VimVault Eventbroker Module
 Name: naemon-vimvault
 Version: 1.4.2
-Release: 4.31
+Release: 4.32%{?dist}
 License: GPL-3.0-or-later
 Group: Applications/System
 URL: https://www.naemon.io/
@@ -65,5 +65,8 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/vimvault.cfg
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-4
+- added optional macro dist to release
+
 * Fri Nov 05 2021 Sven Nierlein <sven.nierlein@consol.de> 1.3.0-1
 - Add packaging

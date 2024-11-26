@@ -1,7 +1,7 @@
 Summary: Naemon Livestatus Eventbroker Module
 Name: naemon-livestatus
 Version: 1.4.2
-Release: 15.30
+Release: 15.31%{?dist}
 License: GPL-2.0-only
 Group: Applications/System
 URL: https://www.naemon.io/
@@ -114,5 +114,8 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/livestatus.cfg
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-15
+- added optional macro dist to release
+
 * Tue Sep 19 2017 Sven Nierlein <sven.nierlein@consol.de> 1.0.7-1
 - Decouple core and livestatus

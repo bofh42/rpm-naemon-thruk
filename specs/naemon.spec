@@ -11,7 +11,7 @@
 Summary: Open Source Host, Service And Network Monitoring Program
 Name: naemon
 Version: 1.4.2
-Release: 14.30
+Release: 14.31%{?dist}
 License: GPL-2.0-only
 BuildArch: noarch
 Group: Applications/System
@@ -25,6 +25,7 @@ BuildRequires: apache2
 %else
 BuildRequires: httpd
 %endif
+BuildRequires: make
 Requires: %{name}-core            >= %{version}
 Requires: %{name}-livestatus      >= %{version}
 Requires: %{name}-vimvault        >= 1.4.2
@@ -148,6 +149,10 @@ exit 0
 %endif
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-14
+- added optional macro dist to release
+- added BuildRequires make
+
 * Fri Nov 05 2021 Sven Nierlein <sven.nierlein@consol.de> 1.3.0-1
 - Add vimvault module
 

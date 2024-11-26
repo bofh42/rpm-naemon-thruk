@@ -10,7 +10,7 @@
 
 Name:          thruk
 Version:       3.18
-Release:       41.8
+Release:       41.9%{?dist}
 License:       GPL-2.0-or-later
 Packager:      Sven Nierlein <sven.nierlein@consol.de>
 Vendor:        Labs Consol
@@ -51,7 +51,12 @@ Group:       Applications/System
 Requires:    libthruk >= 2.44.2
 Requires(preun): libthruk
 Requires(post): libthruk
-Requires:    perl logrotate gd wget
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
+Requires:    perl-interpreter
+%else
+Requires:    perl
+%endif
+Requires:    logrotate gd wget
 AutoReqProv: no
 
 #sles and opensuse
@@ -509,6 +514,10 @@ exit 0
 
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-41
+- added optional macro dist to release
+- Requires perl-interpreter for rhel >= 8 or fedora >= 28 (200 dependencies less)
+
 * Fri Jun 12 2015 Sven Nierlein <sven@consol.de> - 2.00
 - split into several subpackages
 

@@ -3,13 +3,13 @@
 Summary: Open Source Host, Service And Network Monitoring Program
 Name: naemon-core
 Version: 1.4.2
-Release: 19.30
+Release: 19.31%{?dist}
 License: GPL-2.0-only
 Group: Applications/System
 URL: https://www.naemon.io/
 Packager: Naemon Core Development Team <naemon-dev@monitoring-lists.org>
 Vendor: Naemon Core Development Team
-Source0: naemon-%{version}.tar.gz
+Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 BuildRequires: gperf
 BuildRequires: logrotate
@@ -104,7 +104,7 @@ Naemon.
 
 
 %prep
-%setup -q -n naemon-%{version}
+%setup -q
 
 %build
 test -f configure || ./autogen.sh
@@ -345,6 +345,10 @@ exit 0
 %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-19
+- added optional macro dist to release
+- changed source to naemon-core and redownloaded tar.gz from github
+
 * Tue Sep 19 2017 Sven Nierlein <sven.nierlein@consol.de> 1.0.7-1
 - Decouple naemon-core and naemon-livestatus
 

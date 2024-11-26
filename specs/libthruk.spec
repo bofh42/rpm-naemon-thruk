@@ -1,7 +1,7 @@
 Summary: Thruk perl libraries
 Name: libthruk
 Version: 3.14
-Release: 19.23
+Release: 19.24%{?dist}
 License: GPL-2.0-or-later
 Group: Applications/System
 URL: http://www.thruk.org/
@@ -99,5 +99,8 @@ large installations.
 %attr(-,root,root) %{_libdir}/thruk
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-19
+- added optional macro dist to release
+
 * Mon Jul 13 2015 Sven Nierlein <sven.nierlein@consol.de> 2.00-1
 - Initial libs package

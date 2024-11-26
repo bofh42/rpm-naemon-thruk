@@ -4,7 +4,7 @@
 
 Name:          mod_gearman
 Version:       5.1.4
-Release:       12.10
+Release:       12.11%{?dist}
 License:       GPL-2.0-or-later
 Packager:      Sven Nierlein <sven.nierlein@consol.de>
 Vendor:        Labs Consol
@@ -12,7 +12,12 @@ URL:           http://labs.consol.de/nagios/mod-gearman/
 Source0:       mod_gearman-%{version}.tar.gz
 Group:         System/Monitoring
 Summary:       Mod-Gearman module for Naemon
-Requires:      libgearman, perl, logrotate, openssl
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
+Requires:      perl-interpreter
+%else
+Requires:      perl
+%endif
+Requires:      libgearman, logrotate, openssl
 BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
 BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
 BuildRequires: libgearman-devel
@@ -142,6 +147,10 @@ getent passwd naemon >/dev/null || \
 %docdir %{_defaultdocdir}
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-12
+- added optional macro dist to release
+- Requires perl-interpreter for rhel >= 8 or fedora >= 28 (200 dependencies less)
+
 * Sat Jun 12 2021 Sven Nierlein <sven@consol.de>
 - remove init.d
 - build with upstream gearmand

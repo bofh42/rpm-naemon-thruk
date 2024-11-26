@@ -5,7 +5,7 @@
 
 Name:           gearmand
 Version:        1.1.19.1
-Release:        9.40
+Release:        9.41%{?dist}
 Summary:        A distributed job system
 
 License:        BSD-3-Clause
@@ -179,6 +179,9 @@ exit 0
 
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-9
+- added optional macro dist to release
+
 * Mon Jul 12 2021 Sven Nierlein <sven@consol.de> - 1.1.19.1-9
 - Adopted for osc
 
