@@ -1,0 +1,10 @@
+[Unit]
+Description=Gearmand distributed job system
+After=syslog.target network.target
+[Service]
+EnvironmentFile=/etc/sysconfig/gearmand
+User=gearmand
+Type=forking
+ExecStart=/usr/sbin/gearmand -d --log-file none --syslog -q libsqlite3 --libsqlite3-db=/var/lib/gearmand.db --store-queue-on-shutdown $OPTIONS
+[Install]
+WantedBy=multi-user.target
