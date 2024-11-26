@@ -8,21 +8,27 @@
 %define apachedir httpd
 %endif
 
+Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
 Version:       3.18
-Release:       41.9%{?dist}
+Release:       1%{?dist}
 License:       GPL-2.0-or-later
-Packager:      Sven Nierlein <sven.nierlein@consol.de>
-Vendor:        Labs Consol
+Group:         bofh42/addon/naemon
+
 URL:           http://thruk.org
-%define fullname %{name}-%{version}
-Source0:       %{fullname}.tar.gz
+Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum 3d33069d7f7323edae71651adf8ff769
+
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
-Group:         Applications/Monitoring
+
+BuildRequires: xxhash
+BuildRequires: nodejs
 BuildRequires: autoconf, automake, perl, patch
-Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
-AutoReqProv:   no
 BuildRequires: libthruk >= 2.44.2
+
+AutoReqProv:   no
+
 Requires:      thruk-base = %{version}-%{release}
 Requires:      thruk-plugin-reporting = %{version}-%{release}
 %if 0%{?suse_version} < 1315
@@ -52,7 +58,7 @@ Requires:    libthruk >= 2.44.2
 Requires(preun): libthruk
 Requires(post): libthruk
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
-Requires:    perl-interpreter
+Requires:    perl-interpreter, thruk-selinux
 %else
 Requires:    perl
 %endif
@@ -109,7 +115,7 @@ This package contains the reporting addon for thruk useful for sla
 and event reporting.
 
 %prep
-%setup -q -n %{fullname}
+%setup -q -n Thruk-%{version}
 
 %build
 export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
@@ -514,6 +520,12 @@ exit 0
 
 
 %changelog
+* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
+- reset release number to 1 for my own repo
+- use git source url and save xxh128 hash in the spec file and check it
+- added nodejs as BuildRequires
+- added my new thruk-selinux as Requires for el8+
+
 * Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-41
 - added optional macro dist to release
 - Requires perl-interpreter for rhel >= 8 or fedora >= 28 (200 dependencies less)
