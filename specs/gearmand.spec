@@ -16,9 +16,9 @@ URL:            http://www.gearman.org
 Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
 # key copied from https://fewbar.com/clint-byrum-public-key/
-Source2:        gearman-clint-byrum.asc
-Source3:        gearmand.sysconfig
-Source4:        gearmand.service
+Source2:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearman-clint-byrum.asc
+Source3:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearmand.sysconfig
+Source4:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearmand.service
 
 BuildRequires:  gnupg2
 BuildRequires:  gcc-c++
@@ -191,6 +191,9 @@ exit 0
 
 
 %changelog
+* Wed Nov 27 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-1
+- get the 3 extra source files from my rpm spec file git
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-1
 - reset release number to 1 for my own repo
 - source now with git url
