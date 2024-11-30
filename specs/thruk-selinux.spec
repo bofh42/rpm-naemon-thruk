@@ -4,13 +4,13 @@ Name:          thruk-selinux
 Version:       0.0.1
 Release:       1%{?dist}
 Summary:       SELinux policies for thruk
-License:       GPLv3+
+License:       GPLv2+
 Group:         bofh42/addon/naemon
 
 URL:           https://github.com/bofh42/%{name}
 Source0:       %{url}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 89149872aad0d50c84888f26d3ae2f57
+%global src0sum a1741fb0f9efc39ead23b3401fcf2264
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -34,33 +34,37 @@ make -f /usr/share/selinux/devel/Makefile
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -p -m 644 -D thruk.pp $RPM_BUILD_ROOT%{_datadir}/selinux/packages/thruk/thruk.pp
+install -p -m 644 -D thruk_42.pp $RPM_BUILD_ROOT%{_datadir}/selinux/packages/thruk/thruk_42.pp
 
-# all the script parts are from the epel nrpe rpm
+# all the script parts are from the epel nrpe rpm and adjusted
 %post
 if [ "$1" -le "1" ]; then # First install
-   semodule -i %{_datadir}/selinux/packages/thruk/thruk.pp 2>/dev/null || :
-   fixfiles -R thruk restore || :
+  semodule -i %{_datadir}/selinux/packages/thruk/thruk_42.pp 2>/dev/null || :
+  fixfiles restore /etc/thruk /var/log/thruk /var/cache/thruk /var/lib/thruk >/dev/null || :
 fi
 
 %preun
 if [ "$1" -lt "1" ]; then # Final removal
-    semodule -r thruk 2>/dev/null || :
-    fixfiles -R thruk restore || :
+  semodule -r thruk_42 2>/dev/null || :
+  fixfiles restore /etc/thruk /var/log/thruk /var/cache/thruk /var/lib/thruk >/dev/null || :
 fi
 
 %postun
 if [ "$1" -ge "1" ]; then # Upgrade
     # Replaces the module if it is already loaded
-    semodule -i %{_datadir}/selinux/packages/thruk/thruk.pp 2>/dev/null || :
+    semodule -i %{_datadir}/selinux/packages/thruk/thruk_42.pp 2>/dev/null || :
 fi
 
 %files
 %license LICENSE
 %doc README.md
-%{_datadir}/selinux/packages/thruk/thruk.pp
+%{_datadir}/selinux/packages/thruk/thruk_42.pp
 
 %changelog
+* Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
+- from scratch new git repo
+- fixfiles with dir not rpm
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
 - better git source url and save xxh128 hash in the spec file and check it
 
