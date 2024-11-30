@@ -61,7 +61,7 @@ fi
 %{_datadir}/selinux/packages/thruk/thruk.pp
 
 %changelog
-* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
+* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
 - better git source url and save xxh128 hash in the spec file and check it
 
 * Mon Nov 25 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1

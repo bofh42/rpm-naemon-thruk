@@ -156,7 +156,7 @@ exit 0
 %endif
 
 %changelog
-* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it
 
