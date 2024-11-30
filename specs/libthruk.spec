@@ -72,14 +72,6 @@ BuildRequires: perl(Module::ScanDeps), perl(IO::CaptureOutput), perl(Mail::Addre
 BuildRequires: perl(IO::HTML), perl(Apache::LogFormat::Compiler), perl(Devel::StackTrace)
 BuildRequires: perl(Devel::StackTrace::AsHTML), perl(Filesys::Notify::Simple), perl(File::Listing)
 BuildRequires: perl(HTTP::Daemon), perl(WWW::RobotRules)
-# just to be on the save side, install them all
-# you find this in my bofh42/extras repo
-Requires: perl(Mock::Config)
-# part of the os
-Requires: perl(Module::ScanDeps), perl(IO::CaptureOutput), perl(Mail::Address), perl(CGI)
-Requires: perl(IO::HTML), perl(Apache::LogFormat::Compiler), perl(Devel::StackTrace)
-Requires: perl(Devel::StackTrace::AsHTML), perl(Filesys::Notify::Simple), perl(File::Listing)
-Requires: perl(HTTP::Daemon), perl(WWW::RobotRules)
 # this is from testing and it did complain abount missing modules
 Requires: perl(threads), perl(File::Copy)
 %endif
@@ -124,6 +116,9 @@ echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %attr(-,root,root) %{_libdir}/thruk
 
 %changelog
+* Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
+- reduced extra Requires for el9 to perl(threads), perl(File::Copy)
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it
