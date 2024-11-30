@@ -174,6 +174,10 @@ mkdir -p -m 0755 %{buildroot}%{_localstatedir}/run/naemon
 %if %{?_unitdir:1}0
 # Install systemd entry
 %{__install} -D -m 0644 -p daemon-systemd %{buildroot}%{_unitdir}/naemon.service
+# for me /bin/su fails but runuser works on RHEL 9.5 with SELinux
+%if 0%{?el9}
+sed -i -e 's|^ExecStartPre=/bin/su naemon --login --shell=/bin/sh "--command=/usr/bin/naemon --verify-config /etc/naemon/naemon.cfg"|ExecStartPre=%{_sbindir}/runuser -u naemon -- %{_bindir}/naemon --verify-config %{_sysconfdir}/naemon/naemon.cfg|' %{buildroot}%{_unitdir}/naemon.service
+%endif
 %{__install} -D -m 0644 -p naemon.tmpfiles.conf %{buildroot}%{_tmpfilesdir}/naemon.conf
 %{__install} -d -m 0755 %{buildroot}/%{_localstatedir}/run/naemon/
 # Move SystemV init-script
@@ -353,7 +357,10 @@ exit 0
 %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
 
 %changelog
-* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+* Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
+- sed naemon.service replace su with runuser
+
+* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it
 
