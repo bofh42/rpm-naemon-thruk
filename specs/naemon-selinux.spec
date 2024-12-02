@@ -10,7 +10,7 @@ Group:         bofh42/addon/naemon
 URL:           https://github.com/bofh42/%{name}
 Source0:       %{url}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 233f4d78f6c49fdb06544745a924d373
+%global src0sum b960ed56ece32943c442b3d5625aee20
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
