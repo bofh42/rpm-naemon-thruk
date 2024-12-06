@@ -73,7 +73,7 @@ BuildRequires: perl(IO::HTML), perl(Apache::LogFormat::Compiler), perl(Devel::St
 BuildRequires: perl(Devel::StackTrace::AsHTML), perl(Filesys::Notify::Simple), perl(File::Listing)
 BuildRequires: perl(HTTP::Daemon), perl(WWW::RobotRules)
 # this is from testing and it did complain abount missing modules
-Requires: perl(threads), perl(File::Copy)
+Requires: perl(threads), perl(File::Copy), perl(Time::HiRes)
 %endif
 
 # fedora
@@ -116,6 +116,9 @@ echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %attr(-,root,root) %{_libdir}/thruk
 
 %changelog
+* Fri Dec 06 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
+- added el9 Requires perl(Time::HiRes)
+
 * Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
 - reduced extra Requires for el9 to perl(threads), perl(File::Copy)
 
