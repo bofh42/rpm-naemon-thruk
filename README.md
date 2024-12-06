@@ -15,8 +15,8 @@ You can build rpms from just the spec file with `spectool -gf -R <spec>` and `rp
 The order of building it matters, because of some BuildRequires.  
 For me it looks like this:
 ```
-for i in naemon naemon-core naemon-livestatus naemon-vimvault \
-         gearmand mod_gearman libthruk thruk-selinux thruk ; do
+for i in naemon naemon-core naemon-livestatus naemon-vimvault naemon-selinux \
+         gearmand mod_gearman libthruk thruk thruk-selinux ; do
   run-image.sh -o el9 -- ~/build/bin/rbba --source rpmbuild/specs/${i}.spec || break
 done
 ```
