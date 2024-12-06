@@ -22,6 +22,7 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 BuildRequires: xxhash
 BuildRequires: selinux-policy-devel
 
+Requires:      naemon-core
 Requires:      policycoreutils
 
 %description
@@ -43,20 +44,32 @@ install -p -m 644 -D %{selinux_42}.pp $RPM_BUILD_ROOT%{_datadir}/selinux/package
 
 %post
 if [ "$1" -le "1" ]; then # First install
-  semodule -i %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp 2>/dev/null || :
-  fixfiles %{selinux_fix} >/dev/null || :
+  if [ -f /run/.containerenv ]; then
+    echo "INFO: %{name} is installed in a container. No SELinux %{selinux_42} module activation is done (just install)"
+  else
+    semodule -i %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp 2>/dev/null || :
+    fixfiles %{selinux_fix} >/dev/null || :
+  fi
 fi
 
 %preun
 if [ "$1" -lt "1" ]; then # Final removal
-  semodule -r %{selinux_42} 2>/dev/null || :
-  fixfiles %{selinux_fix} >/dev/null || :
+  if [ -f /run/.containerenv ]; then
+    echo "INFO: %{name} is installed in a container. No SELinux %{selinux_42} module removal is done (just uninstall)"
+  else
+    semodule -r %{selinux_42} 2>/dev/null || :
+    fixfiles %{selinux_fix} >/dev/null || :
+  fi
 fi
 
 %postun
 if [ "$1" -ge "1" ]; then # Upgrade
-  # Replaces the module if it is already loaded
-  semodule -i %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp 2>/dev/null || :
+  if [ -f /run/.containerenv ]; then
+    echo "INFO: %{name} is installed in a container. No SELinux %{selinux_42} module update is done (just installed)"
+  else
+    # Replaces the module if it is already loaded
+    semodule -i %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp 2>/dev/null || :
+  fi
 fi
 
 %files
@@ -65,6 +78,10 @@ fi
 %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp
 
 %changelog
+* Fri Dec 06 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
+- Requires nameon-core to be sure the fixfiles do exist
+- no SELinux module activation/deactivation in a container
+
 * Mon Dec 02 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.1-1
 - use selinux_42 macro for name and bofh42 as package dir
 - new selinux_fix macro

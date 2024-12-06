@@ -58,7 +58,7 @@ Requires:    libthruk >= 2.44.2
 Requires(preun): libthruk
 Requires(post): libthruk
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
-Requires:    perl-interpreter, thruk-selinux
+Requires:    perl-interpreter
 %else
 Requires:    perl
 %endif
@@ -520,6 +520,9 @@ exit 0
 
 
 %changelog
+* Fri Dec 05 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
+- removed Requires thruk-selinux (changed Requires order)
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it
