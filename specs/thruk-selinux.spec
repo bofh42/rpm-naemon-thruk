@@ -4,7 +4,7 @@
 %global selinux_fix restore /etc/thruk /var/log/thruk /var/cache/thruk /var/lib/thruk
 
 Name:          thruk-selinux
-Version:       0.0.2
+Version:       0.0.3
 Release:       1%{?dist}
 Summary:       SELinux policies for thruk
 License:       GPLv2+
@@ -13,7 +13,7 @@ Group:         bofh42/addon/naemon
 URL:           https://github.com/bofh42/%{name}
 Source0:       %{url}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum a6468eb4549234dbb9701b8d5c6f9d14
+%global src0sum 5b228f449a3a1e743190a0b313c197e1
 
 BuildArch:     noarch
 
@@ -78,6 +78,9 @@ fi
 %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp
 
 %changelog
+* Sun Dec 08 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.3-1
+- upstream update 0.0.3
+
 * Sat Dec 07 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.2-1
 - update from my 1st live server in permissive mode
 
