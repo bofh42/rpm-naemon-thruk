@@ -257,7 +257,7 @@ case "$*" in
       /usr/sbin/a2enmod rewrite
     %endif
     %if %{?_unitdir:1}0
-      #%systemd_post thruk.service
+      #systemd_post thruk.service
     %else
       chkconfig --add thruk
     %endif
@@ -520,6 +520,9 @@ exit 0
 
 
 %changelog
+* Sun Dec 08 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
+- bugfix post: deactivated systemd_post as intended
+
 * Fri Dec 05 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
 - removed Requires thruk-selinux (changed Requires order)
 
