@@ -1,0 +1,10 @@
+/var/log/nagflux/nagflux.log {
+	missingok
+	rotate 52
+	compress
+	delaycompress
+	notifempty
+	postrotate
+		systemctl reload nagflux > /dev/null
+	endscript
+}
