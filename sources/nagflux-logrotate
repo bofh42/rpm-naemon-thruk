@@ -5,6 +5,6 @@
 	delaycompress
 	notifempty
 	postrotate
-		systemctl reload nagflux > /dev/null
+		systemctl restart nagflux.service > /dev/null
 	endscript
 }
