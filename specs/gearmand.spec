@@ -16,9 +16,9 @@ URL:            http://www.gearman.org
 Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
 # key copied from https://fewbar.com/clint-byrum-public-key/
-Source2:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearman-clint-byrum.asc
-Source3:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearmand.sysconfig
-Source4:        https://raw.githubusercontent.com/bofh42/naemon-thruk-rpms/refs/heads/main/sources/gearmand.service
+Source2:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearman-clint-byrum.asc
+Source3:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.sysconfig
+Source4:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.service
 
 BuildRequires:  gnupg2
 BuildRequires:  gcc-c++
