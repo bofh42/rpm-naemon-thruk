@@ -10,8 +10,8 @@
 
 Summary: Open Source Host, Service And Network Monitoring Program
 Name: naemon
-Version: 1.4.2
-Release: 14.30
+Version: 1.4.3
+Release: 15.14
 License: GPL-2.0-only
 BuildArch: noarch
 Group: Applications/System

@@ -25,4 +25,3 @@ But my rbba does lots of things for every spec file in a special prepared contai
 - `spectool -gf -R <spec>`
 - `sudo yum-builddep -y <spec>`
 - `rpmbuild -ba <spec>`
-```

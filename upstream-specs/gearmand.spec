@@ -5,7 +5,7 @@
 
 Name:           gearmand
 Version:        1.1.19.1
-Release:        9.40
+Release:        9.55
 Summary:        A distributed job system
 
 License:        BSD-3-Clause
