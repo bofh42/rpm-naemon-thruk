@@ -4,7 +4,7 @@
 
 Summary:       Open Source Host, Service And Network Monitoring Program
 Name:          naemon-core
-Version:       1.4.2
+Version:       1.4.3
 Release:       1%{?dist}
 License:       GPL-2.0-only
 Group:         bofh42/addon/naemon
@@ -12,7 +12,7 @@ Group:         bofh42/addon/naemon
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 3d76de29c7aec0ca9035a63fa56d7b8a
+%global src0sum 6e825e1fc49d328f9f8b51c2c453d471
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -207,16 +207,8 @@ fi
 %post
 case "$*" in
   2)
-    # Upgrading so try and restart if already running
-    # For systemctl systems we need to reload the configs
-    # becaues it'll complain if we just installed a new
-    # init script
-    %if %{?_unitdir:1}0
-      systemctl daemon-reload &>/dev/null || true
-      systemctl condrestart naemon.service &>/dev/null || true
-    %else
-      /etc/init.d/naemon condrestart &>/dev/null || true
-    %endif
+    # Upgrade, don't do anything
+    # Restarts are handled in posttrans
   ;;
   1)
     # install example conf.d only once on the first installation
@@ -297,6 +289,18 @@ case "$*" in
 esac
 exit 0
 
+%posttrans
+# try and restart if already running
+# For systemctl systems we need to reload the configs
+# because it'll complain if we just installed a new
+# init script
+%if %{?_unitdir:1}0
+  systemctl daemon-reload &>/dev/null || true
+  systemctl condrestart naemon.service &>/dev/null || true
+%else
+  /etc/init.d/naemon condrestart &>/dev/null || true
+%endif
+
 
 
 %files
@@ -357,6 +361,10 @@ exit 0
 %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
+- upstream update
+- script changes from upstream spec
+
 * Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
 - sed naemon.service replace su with runuser
 

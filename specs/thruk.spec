@@ -10,7 +10,7 @@
 
 Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
-Version:       3.18
+Version:       3.20.2
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         bofh42/addon/naemon
@@ -18,12 +18,12 @@ Group:         bofh42/addon/naemon
 URL:           http://thruk.org
 Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 3d33069d7f7323edae71651adf8ff769
+%global src0sum 95d047d4ac6b7651cb1439ca05a81d35
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
 BuildRequires: xxhash
-BuildRequires: nodejs
+BuildRequires: npm
 BuildRequires: autoconf, automake, perl, patch
 BuildRequires: libthruk >= 2.44.2
 
@@ -116,7 +116,10 @@ and event reporting.
 
 %prep
 echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
-%setup -q -n Thruk-%{version}
+%setup -q
+
+# change used nodejs
+# sed -i -E 's|^NODEVERSION=.*|NODEVERSION=18|' themes/themes-available/Light/Makefile
 
 %build
 export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
@@ -521,6 +524,9 @@ exit 0
 
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-1
+- upstream update
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
 - bugfix changelog date and really test source checksum
 

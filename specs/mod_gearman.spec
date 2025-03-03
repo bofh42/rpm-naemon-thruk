@@ -5,7 +5,7 @@
 %endif
 
 Name:          mod_gearman
-Version:       5.1.4
+Version:       5.1.7
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         bofh42/addon/naemon
@@ -13,7 +13,7 @@ Group:         bofh42/addon/naemon
 URL:           http://labs.consol.de/nagios/mod-gearman/
 Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 7d2e9fab83b97e4e5920d546593b5d23
+%global src0sum 7d48f53c91a8229051d5a8224c7270d5
 
 Summary:       Mod-Gearman module for Naemon
 
@@ -28,7 +28,7 @@ BuildRequires: xxhash
 BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
 BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
 BuildRequires: libgearman-devel
-BuildRequires: naemon-devel
+BuildRequires: naemon-devel >= 1.4.3
 BuildRequires: perl
 %if %{defined suse_version}
 %else
@@ -155,6 +155,12 @@ getent passwd naemon >/dev/null || \
 %docdir %{_defaultdocdir}
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-1
+- upstream update
+
+* Mon Nov 18 2024 Sven Nierlein <sven@consol.de>
+- set minimum naemon to 1.4.3
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it

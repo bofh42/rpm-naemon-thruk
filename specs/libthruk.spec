@@ -1,7 +1,7 @@
 
 Summary:       Thruk perl libraries
 Name:          libthruk
-Version:       3.14
+Version:       3.20
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         bofh42/addon/naemon
@@ -9,7 +9,7 @@ Group:         bofh42/addon/naemon
 URL:           http://www.thruk.org/
 Source0:       https://github.com/sni/thruk_libs/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum e0f7c3ca7c22ed528072c253ce39b5a8
+%global src0sum 2db46505bdc6e9e8ae05c9bbd2121389
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -116,6 +116,9 @@ echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %attr(-,root,root) %{_libdir}/thruk
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20-1
+- upstream update
+
 * Fri Dec 06 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
 - added el9 Requires perl(Time::HiRes)
 

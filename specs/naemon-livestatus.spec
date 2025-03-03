@@ -2,7 +2,7 @@
 
 Summary:       Naemon Livestatus Eventbroker Module
 Name:          naemon-livestatus
-Version:       1.4.2
+Version:       1.4.3
 Release:       1%{?dist}
 License:       GPL-2.0-only
 Group:         bofh42/addon/naemon
@@ -10,7 +10,7 @@ Group:         bofh42/addon/naemon
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 48646a5d7186a0d5cddd43775337ee9c
+%global src0sum b3869fff1078f24d20896346d8546bc6
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -122,6 +122,9 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/livestatus.cfg
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
+- upstream update
+
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
 - reset release number to 1 for my own repo
 - use git source url and save xxh128 hash in the spec file and check it
