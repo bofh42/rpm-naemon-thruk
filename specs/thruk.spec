@@ -115,6 +115,7 @@ This package contains the reporting addon for thruk useful for sla
 and event reporting.
 
 %prep
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %setup -q -n Thruk-%{version}
 
 %build
@@ -520,10 +521,13 @@ exit 0
 
 
 %changelog
+* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
+- bugfix changelog date and really test source checksum
+
 * Sun Dec 08 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
 - bugfix post: deactivated systemd_post as intended
 
-* Fri Dec 05 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
+* Thu Dec 05 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
 - removed Requires thruk-selinux (changed Requires order)
 
 * Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.18-1
