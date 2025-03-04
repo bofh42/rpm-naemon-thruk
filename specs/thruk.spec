@@ -23,7 +23,7 @@ Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
 BuildRequires: xxhash
-BuildRequires: npm
+BuildRequires: nodejs, npm
 BuildRequires: autoconf, automake, perl, patch
 BuildRequires: libthruk >= 2.44.2
 
@@ -118,8 +118,14 @@ and event reporting.
 echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %setup -q
 
-# change used nodejs
-# sed -i -E 's|^NODEVERSION=.*|NODEVERSION=18|' themes/themes-available/Light/Makefile
+# pin npm package versions for themes buid
+sed -i \
+  -e 's|tailwindcss@latest |tailwindcss@3.4.17 |' \
+  -e 's|postcss@latest |postcss@8.4.49 |' \
+  -e 's|autoprefixer@latest |autoprefixer@10.4.20 |' \
+  -e 's|postcss-import@latest |postcss-import@16.1.0|' \
+  -e 's|@tailwindcss/forms@latest |@tailwindcss/forms@0.5.10 |' \
+  themes/themes-available/Light/Makefile
 
 %build
 export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
@@ -144,6 +150,14 @@ export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
 # make sure themes are built as this point
 test -f themes/themes-available/Light/stylesheets/Light.css || %{__make} themes
 test -f themes/themes-available/Light/stylesheets/Light.css || exit 1
+
+# cleanup themes build artefacts
+rm -rf themes/themes-available/*/Makefile \
+       themes/themes-available/*/node* \
+       themes/themes-available/*/*.json \
+       themes/themes-available/*/*.js \
+       themes/themes-available/*/images/logos \
+       || :
 
 # replace /usr/bin/env according to https://fedoraproject.org/wiki/Packaging:Guidelines#Shebang_lines
 sed -e 's%/usr/bin/env perl%/usr/bin/perl%' -i \
@@ -524,6 +538,9 @@ exit 0
 
 
 %changelog
+* Tue Mar 04 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-1
+- fix themes build (pin npm package versions, cleanup build artefacts)
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-1
 - upstream update
 
