@@ -4,7 +4,7 @@
 %global selinux_fix restore /etc/naemon /var/log/naemon /var/cache/naemon /var/lib/naemon
 
 Name:          naemon-selinux
-Version:       0.0.3
+Version:       0.0.4
 Release:       1%{?dist}
 Summary:       SELinux policies for Naemon
 License:       GPLv2+
@@ -13,7 +13,7 @@ Group:         bofh42/addon/naemon
 URL:           https://github.com/bofh42/%{name}
 Source0:       %{url}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 1d8485542d3e16006e211ce75356af52
+%global src0sum cde0cd5d09d4924873e5abb911700be6
 
 BuildArch:     noarch
 
@@ -78,6 +78,9 @@ fi
 %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp
 
 %changelog
+* Tue Mar 04 2025 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.4-1
+- upstream update 0.0.4
+
 * Sun Dec 08 2024 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.3-1
 - upstream update 0.0.3
 
