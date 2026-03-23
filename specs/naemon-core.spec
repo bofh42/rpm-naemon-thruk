@@ -5,9 +5,9 @@
 Summary:       Open Source Host, Service And Network Monitoring Program
 Name:          naemon-core
 Version:       1.4.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPL-2.0-only
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
@@ -81,7 +81,7 @@ Naemon ships the Thruk gui with extended reporting and dashboard features.
 
 %package dbg
 Summary:   Naemon Monitoring Debug Core
-Group:     Applications/System
+Group:     42/addon/naemon
 
 %description dbg
 contains the naemon core with debug symbols.
@@ -89,7 +89,7 @@ contains the naemon core with debug symbols.
 
 %package -n naemon-devel
 Summary: Development Files For Naemon
-Group: Development/Libraries
+Group: 42/addon/naemon
 Requires: libnaemon = %version
 Requires: glib2-devel
 
@@ -101,7 +101,7 @@ using Naemons own APIs, you should install this package.
 
 %package -n libnaemon
 Summary: Shared Library for Naemon and NEB modules
-Group: Development/Libraries
+Group: 42/addon/naemon
 
 %description -n libnaemon
 libnaemon contains the shared library for building NEB modules or addons for
@@ -361,6 +361,9 @@ exit 0
 %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
 - upstream update
 - script changes from upstream spec

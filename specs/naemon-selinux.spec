@@ -5,10 +5,10 @@
 
 Name:          naemon-selinux
 Version:       0.0.4
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       SELinux policies for Naemon
 License:       GPLv2+
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           https://github.com/bofh42/%{name}
 Source0:       %{url}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
@@ -78,6 +78,9 @@ fi
 %{_datadir}/selinux/packages/bofh42/%{selinux_42}.pp
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.4-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Tue Mar 04 2025 Peter Tuschy <foss+rpm@bofh42.de> - 0.0.4-1
 - upstream update 0.0.4
 

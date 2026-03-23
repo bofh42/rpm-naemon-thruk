@@ -3,9 +3,9 @@
 Summary:       Naemon VimVault Eventbroker Module
 Name:          naemon-vimvault
 Version:       1.4.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPL-3.0-or-later
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/naemon-vimcrypt-vault-broker/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
@@ -73,6 +73,9 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/vimvault.cfg
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
 - upstream update
 

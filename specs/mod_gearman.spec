@@ -6,9 +6,9 @@
 
 Name:          mod_gearman
 Version:       5.1.7
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPL-2.0-or-later
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           http://labs.consol.de/nagios/mod-gearman/
 Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
@@ -155,6 +155,9 @@ getent passwd naemon >/dev/null || \
 %docdir %{_defaultdocdir}
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-1
 - upstream update
 

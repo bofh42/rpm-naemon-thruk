@@ -7,10 +7,10 @@
 
 Name:           gearmand
 Version:        1.1.19.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 License:        BSD-3-Clause
-Group:          bofh42/addon/naemon
+Group:          42/addon/naemon
 
 URL:            http://www.gearman.org
 Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -61,6 +61,7 @@ communicates.
 
 %package -n libgearman%{libversion}
 Summary:        Development libraries for gearman
+Group:          42/addon/naemon
 Provides:       libgearman-1.0 = %{version}-%{release}
 Obsoletes:      libgearman-1.0 < %{version}-%{release}
 
@@ -71,7 +72,7 @@ to load balance lots of function calls, or to call functions between languages.
 
 %package -n libgearman-devel
 Summary:        Development headers for libgearman
-Group:          Development/Libraries/Other
+Group:          42/addon/naemon
 Requires:       pkgconfig, libgearman%{libversion} = %{version}-%{release}
 Requires:       libevent-devel
 Provides:       libgearman-1.0-devel = %{version}-%{release}
@@ -81,9 +82,7 @@ Obsoletes:      libgearman-1.0-devel < %{version}-%{release}
 This package contains necessary header files for Gearman development.
 
 %prep
-gpg2 --dearmor < %{SOURCE2} >%{name}-%{version}.gpg
-gpg2 --quiet --keyring ./%{name}-%{version}.gpg --verify --trust-model always %{SOURCE1} %{SOURCE0}
-rm ./%{name}-%{version}.gpg
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'   
 
 %setup -q
 
@@ -191,6 +190,10 @@ exit 0
 
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-2
+- changed group to 42/addon/naemon for my new repo scripts
+- use gpgverify macro for directly asc key use
+
 * Wed Nov 27 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-1
 - get the 3 extra source files from my rpm spec file git
 

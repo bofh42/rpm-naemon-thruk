@@ -11,9 +11,9 @@
 Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
 Version:       3.20.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPL-2.0-or-later
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           http://thruk.org
 Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
@@ -53,7 +53,7 @@ large installations.
 
 %package base
 Summary:     Thruk Gui Base Files
-Group:       Applications/System
+Group:       42/addon/naemon
 Requires:    libthruk >= 2.44.2
 Requires(preun): libthruk
 Requires(post): libthruk
@@ -101,7 +101,7 @@ This package contains the base files for thruk.
 
 %package plugin-reporting
 Summary:     Thruk Gui Reporting Addon
-Group:       Applications/System
+Group:       42/addon/naemon
 Requires:    %{name}-base = %{version}-%{release}
 %if %{defined suse_version}
 Requires:    xorg-x11-fonts
@@ -538,6 +538,9 @@ exit 0
 
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Tue Mar 04 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-1
 - fix themes build (pin npm package versions, cleanup build artefacts)
 

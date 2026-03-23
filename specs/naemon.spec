@@ -11,10 +11,10 @@
 Summary:       Open Source Host, Service And Network Monitoring Program
 Name:          naemon
 Version:       1.4.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPL-2.0-only
 BuildArch:     noarch
-Group:         bofh42/addon/naemon
+Group:         42/addon/naemon
 
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
@@ -57,7 +57,7 @@ Naemon ships the Thruk gui with extended reporting and dashboard features.
 
 %package thruk
 Summary:     Thruk Gui For Naemon
-Group:       Applications/System
+Group:       42/addon/naemon
 Requires:    thruk
 Requires(pre): naemon-core >= %{version}-%{release}
 %if 0%{?systemd_requires}
@@ -156,6 +156,9 @@ exit 0
 %endif
 
 %changelog
+* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
+- changed group to 42/addon/naemon for my new repo scripts
+
 * Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
 - upstream update
 
