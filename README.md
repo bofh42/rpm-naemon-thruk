@@ -4,7 +4,7 @@ my rpm spec files for [Naemon](https://www.naemon.io/) and [Thruk](https://thruk
 # Description
 These spec files are based on [home:naemon - openSUSE Build Service](https://build.opensuse.org/project/show/home:naemon).  
 I changed them slightly with the goal to build all rpms with only the spec file and sources from git repos.  
-Build and tested for/with [Red Hat Enterprise Linux Server](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/server) 9
+Build and tested for/with [Red Hat Enterprise Linux Server](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/server) 9/10
 or clones like [AlmaLinux](https://almalinux.org/), [Rocky Linux](https://rockylinux.org/).  
 
 # Build rpms

@@ -18,7 +18,11 @@ BuildRequires: gd-devel > 1.8
 BuildRequires: zlib-devel
 BuildRequires: libpng-devel
 BuildRequires: libjpeg-devel
+%if 0%{?el10}
+BuildRequires: mysql8.4-devel
+%else
 BuildRequires: mysql-devel
+%endif
 BuildRequires: perl
 BuildRequires: autoconf
 BuildRequires: automake
@@ -61,7 +65,7 @@ Requires: perl(Digest)
 BuildRequires: perl-devel
 BuildRequires: expat-devel
 %endif
-%if 0%{?el9}
+%if 0%{?el9} || 0%{?el10}
 BuildRequires: perl-devel
 BuildRequires: expat-devel
 # to remove warnings at build time this bunch of perl rpms is needed (not sure if it is Requires too)
