@@ -1,0 +1,3 @@
+- you find the original spec files in specs/ taken from [home:naemon - openSUSE Build Service](https://build.opensuse.org/project/show/home:naemon)
+- diff to my specs is in diff/ as patch
+- `tools/get-latest-spec.sh` downloads latest src.rpm and unpack spec files

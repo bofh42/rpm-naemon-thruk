@@ -1,0 +1,81 @@
+diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
+--- upstream/specs/mod_gearman.spec	2026-03-24 09:48:49.822325610 +0100
++++ specs/mod_gearman.spec	2026-03-24 17:18:07.437574538 +0100
+@@ -1,18 +1,30 @@
++%global debug_package %{nil}
++
+ %if ! %{defined _fillupdir}
+ %define _fillupdir %{_localstatedir}/adm/fillup-templates
+ %endif
+ 
+ Name:          mod_gearman
+ Version:       5.1.7
+-Release:       14.13
++Release:       2%{?dist}
+ License:       GPL-2.0-or-later
+-Packager:      Sven Nierlein <sven.nierlein@consol.de>
+-Vendor:        Labs Consol
++Group:         42/addon/naemon
++
+ URL:           http://labs.consol.de/nagios/mod-gearman/
+-Source0:       mod_gearman-%{version}.tar.gz
+-Group:         System/Monitoring
++Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
++# this needs to be updated for every version change
++%global src0sum 7d48f53c91a8229051d5a8224c7270d5
++
+ Summary:       Mod-Gearman module for Naemon
+-Requires:      libgearman, perl, logrotate, openssl
++
++%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
++Requires:      perl-interpreter
++%else
++Requires:      perl
++%endif
++Requires:      libgearman, logrotate, openssl
++
++BuildRequires: xxhash
+ BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
+ BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
+ BuildRequires: libgearman-devel
+@@ -35,6 +47,8 @@
+ be bound to host and servicegroups.
+ 
+ %prep
++echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
++
+ %setup -q
+ 
+ %build
+@@ -71,7 +85,6 @@
+ %{__rm} -f %{buildroot}%{_initrddir}/mod-gearman-worker
+ 
+ 
+-
+ %pre
+ getent group naemon >/dev/null || groupadd -r naemon
+ getent passwd naemon >/dev/null || \
+@@ -142,9 +155,23 @@
+ %docdir %{_defaultdocdir}
+ 
+ %changelog
++* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-2
++- changed group to 42/addon/naemon for my new repo scripts
++
++* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-1
++- upstream update
++
+ * Mon Nov 18 2024 Sven Nierlein <sven@consol.de>
+ - set minimum naemon to 1.4.3
+ 
++* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-1
++- reset release number to 1 for my own repo
++- use git source url and save xxh128 hash in the spec file and check it
++
++* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.4-12
++- added optional macro dist to release
++- Requires perl-interpreter for rhel >= 8 or fedora >= 28 (200 dependencies less)
++
+ * Sat Jun 12 2021 Sven Nierlein <sven@consol.de>
+ - remove init.d
+ - build with upstream gearmand

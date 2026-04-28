@@ -1,0 +1,111 @@
+diff -Nau upstream/specs/naemon-core.spec specs/naemon-core.spec
+--- upstream/specs/naemon-core.spec	2026-03-24 09:48:49.822325610 +0100
++++ specs/naemon-core.spec	2026-03-24 17:18:07.437574538 +0100
+@@ -1,16 +1,22 @@
++%global debug_package %{nil}
++
+ %define logmsg logger -t naemon/rpm
+ 
+-Summary: Open Source Host, Service And Network Monitoring Program
+-Name: naemon-core
+-Version: 1.4.3
+-Release: 20.13
+-License: GPL-2.0-only
+-Group: Applications/System
+-URL: https://www.naemon.io/
+-Packager: Naemon Core Development Team <naemon-dev@monitoring-lists.org>
+-Vendor: Naemon Core Development Team
+-Source0: naemon-%{version}.tar.gz
+-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
++Summary:       Open Source Host, Service And Network Monitoring Program
++Name:          naemon-core
++Version:       1.4.3
++Release:       2%{?dist}
++License:       GPL-2.0-only
++Group:         42/addon/naemon
++
++URL:           https://www.naemon.io/
++Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
++# this needs to be updated for every version change
++%global src0sum 6e825e1fc49d328f9f8b51c2c453d471
++
++BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
++
++BuildRequires: xxhash
+ BuildRequires: gperf
+ BuildRequires: logrotate
+ BuildRequires: autoconf
+@@ -75,7 +81,7 @@
+ 
+ %package dbg
+ Summary:   Naemon Monitoring Debug Core
+-Group:     Applications/System
++Group:     42/addon/naemon
+ 
+ %description dbg
+ contains the naemon core with debug symbols.
+@@ -83,7 +89,7 @@
+ 
+ %package -n naemon-devel
+ Summary: Development Files For Naemon
+-Group: Development/Libraries
++Group: 42/addon/naemon
+ Requires: libnaemon = %version
+ Requires: glib2-devel
+ 
+@@ -95,7 +101,7 @@
+ 
+ %package -n libnaemon
+ Summary: Shared Library for Naemon and NEB modules
+-Group: Development/Libraries
++Group: 42/addon/naemon
+ 
+ %description -n libnaemon
+ libnaemon contains the shared library for building NEB modules or addons for
+@@ -104,7 +110,9 @@
+ 
+ 
+ %prep
+-%setup -q -n naemon-%{version}
++echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
++
++%setup -q
+ 
+ %build
+ test -f configure || ./autogen.sh
+@@ -166,6 +174,10 @@
+ %if %{?_unitdir:1}0
+ # Install systemd entry
+ %{__install} -D -m 0644 -p daemon-systemd %{buildroot}%{_unitdir}/naemon.service
++# for me /bin/su fails but runuser works on RHEL 9.5 with SELinux
++%if 0%{?el9}
++sed -i -e 's|^ExecStartPre=/bin/su naemon --login --shell=/bin/sh "--command=/usr/bin/naemon --verify-config /etc/naemon/naemon.cfg"|ExecStartPre=%{_sbindir}/runuser -u naemon -- %{_bindir}/naemon --verify-config %{_sysconfdir}/naemon/naemon.cfg|' %{buildroot}%{_unitdir}/naemon.service
++%endif
+ %{__install} -D -m 0644 -p naemon.tmpfiles.conf %{buildroot}%{_tmpfilesdir}/naemon.conf
+ %{__install} -d -m 0755 %{buildroot}/%{_localstatedir}/run/naemon/
+ # Move SystemV init-script
+@@ -349,6 +361,24 @@
+ %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
+ 
+ %changelog
++* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
++- changed group to 42/addon/naemon for my new repo scripts
++
++* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-1
++- upstream update
++- script changes from upstream spec
++
++* Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
++- sed naemon.service replace su with runuser
++
++* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-1
++- reset release number to 1 for my own repo
++- use git source url and save xxh128 hash in the spec file and check it
++
++* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.2-19
++- added optional macro dist to release
++- changed source to naemon-core and redownloaded tar.gz from github
++
+ * Tue Sep 19 2017 Sven Nierlein <sven.nierlein@consol.de> 1.0.7-1
+ - Decouple naemon-core and naemon-livestatus
+ 

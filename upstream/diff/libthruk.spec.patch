@@ -1,0 +1,108 @@
+diff -Nau upstream/specs/libthruk.spec specs/libthruk.spec
+--- upstream/specs/libthruk.spec	2026-03-24 09:48:49.822325610 +0100
++++ specs/libthruk.spec	2026-03-24 17:18:07.437574538 +0100
+@@ -1,19 +1,28 @@
+-Summary: Thruk perl libraries
+-Name: libthruk
+-Version: 3.20
+-Release: 20.16
+-License: GPL-2.0-or-later
+-Group: Applications/System
+-URL: http://www.thruk.org/
+-Packager: Sven Nierlein <sven.nierlein@consol.de>
+-Vendor: Labs Consol
+-Source0: %{name}-%{version}.tar.gz
+-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
++
++Summary:       Thruk perl libraries
++Name:          libthruk
++Version:       3.20
++Release:       2%{?dist}
++License:       GPL-2.0-or-later
++Group:         42/addon/naemon
++
++URL:           http://www.thruk.org/
++Source0:       https://github.com/sni/thruk_libs/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
++# this needs to be updated for every version change
++%global src0sum 2db46505bdc6e9e8ae05c9bbd2121389
++
++BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
++
++BuildRequires: xxhash
+ BuildRequires: gd-devel > 1.8
+ BuildRequires: zlib-devel
+ BuildRequires: libpng-devel
+ BuildRequires: libjpeg-devel
++%if 0%{?el10}
++BuildRequires: mysql8.4-devel
++%else
+ BuildRequires: mysql-devel
++%endif
+ BuildRequires: perl
+ BuildRequires: autoconf
+ BuildRequires: automake
+@@ -21,6 +30,7 @@
+ BuildRequires: gcc
+ BuildRequires: chrpath
+ BuildRequires: rsync
++
+ Requires: gd
+ 
+ # sles
+@@ -55,9 +65,19 @@
+ BuildRequires: perl-devel
+ BuildRequires: expat-devel
+ %endif
+-%if 0%{?el9}
++%if 0%{?el9} || 0%{?el10}
+ BuildRequires: perl-devel
+ BuildRequires: expat-devel
++# to remove warnings at build time this bunch of perl rpms is needed (not sure if it is Requires too)
++# you find this in my bofh42/extras repo
++BuildRequires: perl(Mock::Config)
++# part of the os
++BuildRequires: perl(Module::ScanDeps), perl(IO::CaptureOutput), perl(Mail::Address), perl(CGI)
++BuildRequires: perl(IO::HTML), perl(Apache::LogFormat::Compiler), perl(Devel::StackTrace)
++BuildRequires: perl(Devel::StackTrace::AsHTML), perl(Filesys::Notify::Simple), perl(File::Listing)
++BuildRequires: perl(HTTP::Daemon), perl(WWW::RobotRules)
++# this is from testing and it did complain abount missing modules
++Requires: perl(threads), perl(File::Copy), perl(Time::HiRes)
+ %endif
+ 
+ # fedora
+@@ -80,7 +100,8 @@
+ large installations.
+ 
+ %prep
+-%setup -q
++echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
++%setup -q -n thruk_libs-%{version}
+ 
+ %build
+ %{__make}
+@@ -99,5 +120,25 @@
+ %attr(-,root,root) %{_libdir}/thruk
+ 
+ %changelog
++* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.20-2
++- changed group to 42/addon/naemon for my new repo scripts
++
++* Mon Mar 03 2025 Peter Tuschy <foss+rpm@bofh42.de> - 3.20-1
++- upstream update
++
++* Fri Dec 06 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
++- added el9 Requires perl(Time::HiRes)
++
++* Sat Nov 30 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
++- reduced extra Requires for el9 to perl(threads), perl(File::Copy)
++
++* Tue Nov 26 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-1
++- reset release number to 1 for my own repo
++- use git source url and save xxh128 hash in the spec file and check it
++- added a bunch of perl modules for build and install on el9
++
++* Thu Oct 24 2024 Peter Tuschy <foss+rpm@bofh42.de> - 3.14-19
++- added optional macro dist to release
++
+ * Mon Jul 13 2015 Sven Nierlein <sven.nierlein@consol.de> 2.00-1
+ - Initial libs package
