@@ -10,8 +10,8 @@
 
 Summary:       Open Source Host, Service And Network Monitoring Program
 Name:          naemon
-Version:       1.4.3
-Release:       2%{?dist}
+Version:       1.4.4
+Release:       1%{?dist}
 License:       GPL-2.0-only
 BuildArch:     noarch
 Group:         42/addon/naemon
@@ -19,7 +19,7 @@ Group:         42/addon/naemon
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum d4acd2596498a4847deb8b333b7712c7
+%global src0sum 1921614876e1a20b5651f2efc4d8b564
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -156,6 +156,9 @@ exit 0
 %endif
 
 %changelog
+* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.4-1
+- upstream update 1.4.4
+
 * Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
 - changed group to 42/addon/naemon for my new repo scripts
 
