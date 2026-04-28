@@ -6,20 +6,23 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.19.1
-Release:        2%{?dist}
+Version:        1.1.22
+Release:        1%{?dist}
 Summary:        A distributed job system
 License:        BSD-3-Clause
 Group:          42/addon/naemon
 
 URL:            http://www.gearman.org
 Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+# this needs to be updated for every version change
+%global src0sum fff826de4bc7a4142a7f251cd36f6d31
 Source1:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
 # key copied from https://fewbar.com/clint-byrum-public-key/
 Source2:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearman-clint-byrum.asc
 Source3:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.sysconfig
 Source4:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.service
 
+BuildRequires:  xxhash
 BuildRequires:  gnupg2
 BuildRequires:  gcc-c++
 BuildRequires:  chrpath
@@ -82,7 +85,11 @@ Obsoletes:      libgearman-1.0-devel < %{version}-%{release}
 This package contains necessary header files for Gearman development.
 
 %prep
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'   
+# key is chaged to Edward J. Sabol
+# checked the naemon opensuse repo source and it is the same
+# for now switching to checksum
+#{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'   
+echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 
 %setup -q
 
@@ -157,7 +164,7 @@ exit 0
 
 %files
 %license COPYING
-%doc AUTHORS ChangeLog HACKING THANKS
+%doc AUTHORS ChangeLog THANKS
 %if %{defined suse_version}
 %config(noreplace) %{_fillupdir}/sysconfig.gearmand
 %else
@@ -177,7 +184,7 @@ exit 0
 
 %files -n libgearman-devel
 %license COPYING
-%doc AUTHORS ChangeLog HACKING THANKS
+%doc AUTHORS ChangeLog THANKS
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/
 %{_libdir}/pkgconfig/gearmand.pc
@@ -190,6 +197,10 @@ exit 0
 
 
 %changelog
+* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.22-1
+- upstream update 1.1.22
+- for now switch gpg to xxh128
+
 * Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-2
 - changed group to 42/addon/naemon for my new repo scripts
 - use gpgverify macro for directly asc key use
