@@ -2,15 +2,15 @@
 
 Summary:       Naemon Livestatus Eventbroker Module
 Name:          naemon-livestatus
-Version:       1.4.3
-Release:       2%{?dist}
+Version:       1.4.4
+Release:       1%{?dist}
 License:       GPL-2.0-only
 Group:         42/addon/naemon
 
 URL:           https://www.naemon.io/
 Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum b3869fff1078f24d20896346d8546bc6
+%global src0sum 29e0e7a4e0f15c86fe3958e2e636007f
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -122,6 +122,9 @@ exit 0
 %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/livestatus.cfg
 
 %changelog
+* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.4-1
+- upstream update 1.4.4
+
 * Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
 - changed group to 42/addon/naemon for my new repo scripts
 
