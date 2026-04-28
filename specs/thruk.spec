@@ -10,15 +10,15 @@
 
 Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
-Version:       3.20.2
-Release:       2%{?dist}
+Version:       3.22.2
+Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         42/addon/naemon
 
 URL:           http://thruk.org
 Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 95d047d4ac6b7651cb1439ca05a81d35
+%global src0sum 0373faab3f83402ddb9d9d41678f4a1d
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -88,7 +88,7 @@ Requires: perl(Time::HiRes)
 Requires: httpd mod_fcgid cronie
 %else
 # >=rhel7 and fedora
-%if 0%{?el7}%{?el8}%{?el9}%{?fedora}
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
 BuildRequires: perl(ExtUtils::Install) httpd
 Requires: httpd mod_fcgid cronie
 Requires: perl-LWP-Protocol-https
@@ -483,7 +483,9 @@ exit 0
 %{_datadir}/%{name}/plugins/plugins-available/editor
 %config %{_sysconfdir}/%{name}/plugins/plugins-available/editor
 %{_datadir}/%{name}/plugins/plugins-available/node-control
+%{_datadir}/%{name}/plugins/plugins-available/omd
 %config %{_sysconfdir}/%{name}/plugins/plugins-available/node-control
+%config %{_sysconfdir}/%{name}/plugins/plugins-available/omd
 %config(noreplace) %{_sysconfdir}/thruk/themes
 %config(noreplace) %{_sysconfdir}/thruk/menu_local.conf
 %config(noreplace) %{_sysconfdir}/thruk/usercontent/
@@ -538,6 +540,9 @@ exit 0
 
 
 %changelog
+* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.22.2-1
+- upstream update 3.22.2
+
 * Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.20.2-2
 - changed group to 42/addon/naemon for my new repo scripts
 
