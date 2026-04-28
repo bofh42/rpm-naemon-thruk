@@ -5,15 +5,15 @@
 %endif
 
 Name:          mod_gearman
-Version:       5.1.7
-Release:       2%{?dist}
+Version:       5.1.9
+Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         42/addon/naemon
 
 URL:           http://labs.consol.de/nagios/mod-gearman/
 Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 7d48f53c91a8229051d5a8224c7270d5
+%global src0sum 254ef8743f0cd1a8c67e425c322e4b48
 
 Summary:       Mod-Gearman module for Naemon
 
@@ -25,7 +25,7 @@ Requires:      perl
 Requires:      libgearman, logrotate, openssl
 
 BuildRequires: xxhash
-BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
+BuildRequires: autoconf, autoconf-archive, automake, gcc-c++, pkgconfig, ncurses-devel
 BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
 BuildRequires: libgearman-devel
 BuildRequires: naemon-devel >= 1.4.3
@@ -61,7 +61,7 @@ test -f configure || ./autogen.sh
      --with-init-dir="%{_initrddir}" \
      --enable-embedded-perl
 
-%{__make} %{_smp_mflags}
+%{__make} -j1
 
 %install
 %{__rm} -rf %{buildroot}
@@ -83,7 +83,6 @@ touch %{buildroot}%{_sysconfdir}/sysconfig/mod-gearman-worker
 
 # remove SystemV init-script
 %{__rm} -f %{buildroot}%{_initrddir}/mod-gearman-worker
-
 
 %pre
 getent group naemon >/dev/null || groupadd -r naemon
@@ -155,6 +154,9 @@ getent passwd naemon >/dev/null || \
 %docdir %{_defaultdocdir}
 
 %changelog
+* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.9-1
+- upstream update 5.1.9
+
 * Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-2
 - changed group to 42/addon/naemon for my new repo scripts
 
