@@ -1,18 +1,19 @@
 diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
 --- upstream/specs/gearmand.spec	2026-03-24 09:48:49.821325601 +0100
-+++ specs/gearmand.spec	2026-03-24 17:18:07.437574538 +0100
-@@ -1,3 +1,5 @@
++++ specs/gearmand.spec	2026-04-28 23:12:20.688877390 +0200
+@@ -1,19 +1,29 @@
 +%global debug_package %{nil}
 +
  %define         libversion 8
  %if ! %{defined _fillupdir}
  %define _fillupdir %{_localstatedir}/adm/fillup-templates
-@@ -5,15 +7,20 @@
+ %endif
  
  Name:           gearmand
- Version:        1.1.19.1
+-Version:        1.1.19.1
 -Release:        9.55
-+Release:        2%{?dist}
++Version:        1.1.22
++Release:        1%{?dist}
  Summary:        A distributed job system
 -
  License:        BSD-3-Clause
@@ -23,17 +24,20 @@ diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
 -Source1:        gearmand.sysconfig
 -Source2:        gearmand.service
 +Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
++# this needs to be updated for every version change
++%global src0sum fff826de4bc7a4142a7f251cd36f6d31
 +Source1:        https://github.com/gearman/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
 +# key copied from https://fewbar.com/clint-byrum-public-key/
 +Source2:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearman-clint-byrum.asc
 +Source3:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.sysconfig
 +Source4:        https://raw.githubusercontent.com/bofh42/rpm-naemon-thruk/refs/heads/main/sources/gearmand.service
  
++BuildRequires:  xxhash
 +BuildRequires:  gnupg2
  BuildRequires:  gcc-c++
  BuildRequires:  chrpath
  BuildRequires:  libuuid-devel
-@@ -28,6 +35,7 @@
+@@ -28,6 +38,7 @@
  BuildRequires:  zlib-devel
  BuildRequires:  systemd
  BuildRequires:  make
@@ -41,7 +45,7 @@ diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
  Requires:       procps
  Requires:       sqlite
  Requires:       libevent >= 1.4
-@@ -53,6 +61,7 @@
+@@ -53,6 +64,7 @@
  
  %package -n libgearman%{libversion}
  Summary:        Development libraries for gearman
@@ -49,7 +53,7 @@ diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
  Provides:       libgearman-1.0 = %{version}-%{release}
  Obsoletes:      libgearman-1.0 < %{version}-%{release}
  
-@@ -63,7 +72,7 @@
+@@ -63,7 +75,7 @@
  
  %package -n libgearman-devel
  Summary:        Development headers for libgearman
@@ -58,16 +62,20 @@ diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
  Requires:       pkgconfig, libgearman%{libversion} = %{version}-%{release}
  Requires:       libevent-devel
  Provides:       libgearman-1.0-devel = %{version}-%{release}
-@@ -73,6 +82,8 @@
+@@ -73,6 +85,12 @@
  This package contains necessary header files for Gearman development.
  
  %prep
-+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'   
++# key is chaged to Edward J. Sabol
++# checked the naemon opensuse repo source and it is the same
++# for now switching to checksum
++#{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'   
++echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 +
  %setup -q
  
  %build
-@@ -93,14 +104,14 @@
+@@ -93,14 +111,14 @@
  rm -v %{buildroot}%{_libdir}/libgearman*.la
  chrpath --delete %{buildroot}%{_bindir}/gearman
  %if %{defined suse_version}
@@ -85,10 +93,32 @@ diff -Nau upstream/specs/gearmand.spec specs/gearmand.spec
  
  
  %pre
-@@ -179,6 +190,21 @@
+@@ -146,7 +164,7 @@
+ 
+ %files
+ %license COPYING
+-%doc AUTHORS ChangeLog HACKING THANKS
++%doc AUTHORS ChangeLog THANKS
+ %if %{defined suse_version}
+ %config(noreplace) %{_fillupdir}/sysconfig.gearmand
+ %else
+@@ -166,7 +184,7 @@
+ 
+ %files -n libgearman-devel
+ %license COPYING
+-%doc AUTHORS ChangeLog HACKING THANKS
++%doc AUTHORS ChangeLog THANKS
+ %dir %{_includedir}/libgearman
+ %{_includedir}/libgearman/
+ %{_libdir}/pkgconfig/gearmand.pc
+@@ -179,6 +197,25 @@
  
  
  %changelog
++* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.22-1
++- upstream update 1.1.22
++- for now switch gpg to xxh128
++
 +* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.1.19.1-2
 +- changed group to 42/addon/naemon for my new repo scripts
 +- use gpgverify macro for directly asc key use

@@ -1,7 +1,7 @@
 diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
 --- upstream/specs/mod_gearman.spec	2026-03-24 09:48:49.822325610 +0100
-+++ specs/mod_gearman.spec	2026-03-24 17:18:07.437574538 +0100
-@@ -1,18 +1,30 @@
++++ specs/mod_gearman.spec	2026-04-28 22:49:56.925869759 +0200
+@@ -1,19 +1,31 @@
 +%global debug_package %{nil}
 +
  %if ! %{defined _fillupdir}
@@ -9,9 +9,10 @@ diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
  %endif
  
  Name:          mod_gearman
- Version:       5.1.7
+-Version:       5.1.7
 -Release:       14.13
-+Release:       2%{?dist}
++Version:       5.1.9
++Release:       1%{?dist}
  License:       GPL-2.0-or-later
 -Packager:      Sven Nierlein <sven.nierlein@consol.de>
 -Vendor:        Labs Consol
@@ -22,10 +23,11 @@ diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
 -Group:         System/Monitoring
 +Source0:       https://github.com/sni/mod_gearman/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum 7d48f53c91a8229051d5a8224c7270d5
++%global src0sum 254ef8743f0cd1a8c67e425c322e4b48
 +
  Summary:       Mod-Gearman module for Naemon
 -Requires:      libgearman, perl, logrotate, openssl
+-BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
 +
 +%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
 +Requires:      perl-interpreter
@@ -35,9 +37,10 @@ diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
 +Requires:      libgearman, logrotate, openssl
 +
 +BuildRequires: xxhash
- BuildRequires: autoconf, automake, gcc-c++, pkgconfig, ncurses-devel
++BuildRequires: autoconf, autoconf-archive, automake, gcc-c++, pkgconfig, ncurses-devel
  BuildRequires: libtool, libtool-ltdl-devel, libevent-devel, openssl-devel
  BuildRequires: libgearman-devel
+ BuildRequires: naemon-devel >= 1.4.3
 @@ -35,6 +47,8 @@
  be bound to host and servicegroups.
  
@@ -47,18 +50,31 @@ diff -Nau upstream/specs/mod_gearman.spec specs/mod_gearman.spec
  %setup -q
  
  %build
-@@ -71,7 +85,6 @@
+@@ -47,7 +61,7 @@
+      --with-init-dir="%{_initrddir}" \
+      --enable-embedded-perl
+ 
+-%{__make} %{_smp_mflags}
++%{__make} -j1
+ 
+ %install
+ %{__rm} -rf %{buildroot}
+@@ -70,8 +84,6 @@
+ # remove SystemV init-script
  %{__rm} -f %{buildroot}%{_initrddir}/mod-gearman-worker
  
- 
+-
 -
  %pre
  getent group naemon >/dev/null || groupadd -r naemon
  getent passwd naemon >/dev/null || \
-@@ -142,9 +155,23 @@
+@@ -142,9 +154,26 @@
  %docdir %{_defaultdocdir}
  
  %changelog
++* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.9-1
++- upstream update 5.1.9
++
 +* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 5.1.7-2
 +- changed group to 42/addon/naemon for my new repo scripts
 +
