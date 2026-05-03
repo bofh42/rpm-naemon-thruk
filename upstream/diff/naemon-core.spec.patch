@@ -1,6 +1,6 @@
 diff -Nau upstream/specs/naemon-core.spec specs/naemon-core.spec
 --- upstream/specs/naemon-core.spec	2026-03-24 09:48:49.822325610 +0100
-+++ specs/naemon-core.spec	2026-03-24 17:18:07.437574538 +0100
++++ specs/naemon-core.spec	2026-04-28 21:56:00.817469396 +0200
 @@ -1,16 +1,22 @@
 +%global debug_package %{nil}
 +
@@ -19,15 +19,15 @@ diff -Nau upstream/specs/naemon-core.spec specs/naemon-core.spec
 -BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 +Summary:       Open Source Host, Service And Network Monitoring Program
 +Name:          naemon-core
-+Version:       1.4.3
-+Release:       2%{?dist}
++Version:       1.4.4
++Release:       1%{?dist}
 +License:       GPL-2.0-only
 +Group:         42/addon/naemon
 +
 +URL:           https://www.naemon.io/
 +Source0:       https://github.com/naemon/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum 6e825e1fc49d328f9f8b51c2c453d471
++%global src0sum e0672a7d9fdb44a3cf716b82b70a7961
 +
 +BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 +
@@ -84,10 +84,13 @@ diff -Nau upstream/specs/naemon-core.spec specs/naemon-core.spec
  %{__install} -D -m 0644 -p naemon.tmpfiles.conf %{buildroot}%{_tmpfilesdir}/naemon.conf
  %{__install} -d -m 0755 %{buildroot}/%{_localstatedir}/run/naemon/
  # Move SystemV init-script
-@@ -349,6 +361,24 @@
+@@ -349,6 +361,27 @@
  %attr(-,root,root) %{_libdir}/pkgconfig/naemon.pc
  
  %changelog
++* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.4-1
++- upstream update 1.4.4
++
 +* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
 +- changed group to 42/addon/naemon for my new repo scripts
 +

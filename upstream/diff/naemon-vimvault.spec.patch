@@ -1,6 +1,6 @@
 diff -Nau upstream/specs/naemon-vimvault.spec specs/naemon-vimvault.spec
 --- upstream/specs/naemon-vimvault.spec	2026-03-24 09:48:49.823325619 +0100
-+++ specs/naemon-vimvault.spec	2026-03-24 17:18:07.437574538 +0100
++++ specs/naemon-vimvault.spec	2026-04-28 21:57:05.393032384 +0200
 @@ -1,14 +1,20 @@
 -Summary: Naemon VimVault Eventbroker Module
 -Name: naemon-vimvault
@@ -17,15 +17,15 @@ diff -Nau upstream/specs/naemon-vimvault.spec specs/naemon-vimvault.spec
 +
 +Summary:       Naemon VimVault Eventbroker Module
 +Name:          naemon-vimvault
-+Version:       1.4.3
-+Release:       2%{?dist}
++Version:       1.4.4
++Release:       1%{?dist}
 +License:       GPL-3.0-or-later
 +Group:         42/addon/naemon
 +
 +URL:           https://www.naemon.io/
 +Source0:       https://github.com/naemon/naemon-vimcrypt-vault-broker/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum 9636e0e0b43f05c4c53722d5f5626809
++%global src0sum afc81c7117ef48b0937b2ee6e1a21dea
 +
 +BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 +
@@ -44,10 +44,13 @@ diff -Nau upstream/specs/naemon-vimvault.spec specs/naemon-vimvault.spec
  
  
  %build
-@@ -65,5 +73,18 @@
+@@ -65,5 +73,21 @@
  %attr(0644,naemon,naemon) %config(noreplace) %{_sysconfdir}/naemon/module-conf.d/vimvault.cfg
  
  %changelog
++* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.4-1
++- upstream update 1.4.4
++
 +* Tue Mar 24 2026 Peter Tuschy <foss+rpm@bofh42.de> - 1.4.3-2
 +- changed group to 42/addon/naemon for my new repo scripts
 +
