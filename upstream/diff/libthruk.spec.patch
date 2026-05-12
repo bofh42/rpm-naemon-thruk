@@ -1,11 +1,10 @@
-diff -Nau upstream/specs/libthruk.spec specs/libthruk.spec
---- upstream/specs/libthruk.spec	2026-03-24 09:48:49.822325610 +0100
-+++ specs/libthruk.spec	2026-04-28 23:13:20.782442874 +0200
-@@ -1,19 +1,28 @@
+--- upstream/specs/libthruk.spec	2026-05-11 23:53:35.000000000 +0200
++++ specs/libthruk.spec	2026-05-12 10:30:21.033674417 +0200
+@@ -1,14 +1,18 @@
 -Summary: Thruk perl libraries
 -Name: libthruk
--Version: 3.20
--Release: 20.16
+-Version: 3.26
+-Release: 23.17
 -License: GPL-2.0-or-later
 -Group: Applications/System
 -URL: http://www.thruk.org/
@@ -13,10 +12,9 @@ diff -Nau upstream/specs/libthruk.spec specs/libthruk.spec
 -Vendor: Labs Consol
 -Source0: %{name}-%{version}.tar.gz
 -BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
-+
 +Summary:       Thruk perl libraries
 +Name:          libthruk
-+Version:       3.22.2
++Version:       3.24
 +Release:       1%{?dist}
 +License:       GPL-2.0-or-later
 +Group:         42/addon/naemon
@@ -24,53 +22,23 @@ diff -Nau upstream/specs/libthruk.spec specs/libthruk.spec
 +URL:           http://www.thruk.org/
 +Source0:       https://github.com/sni/thruk_libs/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum 7d7e7ee0c87c975b90d44c3cdb134188
++%global src0sum 72d6cf46d1b691ddf2d234cfcb538cb3
 +
 +BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 +
 +BuildRequires: xxhash
- BuildRequires: gd-devel > 1.8
- BuildRequires: zlib-devel
- BuildRequires: libpng-devel
- BuildRequires: libjpeg-devel
-+%if 0%{?el10}
-+BuildRequires: mysql8.4-devel
-+%else
- BuildRequires: mysql-devel
-+%endif
- BuildRequires: perl
- BuildRequires: autoconf
- BuildRequires: automake
-@@ -21,6 +30,7 @@
- BuildRequires: gcc
- BuildRequires: chrpath
+ BuildRequires: make
  BuildRequires: rsync
-+
- Requires: gd
- 
- # sles
-@@ -55,9 +65,19 @@
- BuildRequires: perl-devel
- BuildRequires: expat-devel
- %endif
--%if 0%{?el9}
-+%if 0%{?el9} || 0%{?el10}
- BuildRequires: perl-devel
- BuildRequires: expat-devel
-+# to remove warnings at build time this bunch of perl rpms is needed (not sure if it is Requires too)
-+# you find this in my bofh42/extras repo
-+BuildRequires: perl(Mock::Config)
-+# part of the os
-+BuildRequires: perl(Module::ScanDeps), perl(IO::CaptureOutput), perl(Mail::Address), perl(CGI)
-+BuildRequires: perl(IO::HTML), perl(Apache::LogFormat::Compiler), perl(Devel::StackTrace)
-+BuildRequires: perl(Devel::StackTrace::AsHTML), perl(Filesys::Notify::Simple), perl(File::Listing)
-+BuildRequires: perl(HTTP::Daemon), perl(WWW::RobotRules)
-+# this is from testing and it did complain abount missing modules
-+Requires: perl(threads), perl(File::Copy), perl(Time::HiRes)
+ BuildRequires: gcc
+@@ -35,6 +39,7 @@
+ BuildRequires: epel-release
  %endif
  
- # fedora
-@@ -80,7 +100,8 @@
++Requires:      yumrepo-epel-thruk
+ Requires:      perl(Bit::Vector)
+ Requires:      perl(Cpanel::JSON::XS)
+ Requires:      perl(Crypt::Rijndael)
+@@ -87,7 +92,8 @@
  large installations.
  
  %prep
@@ -80,10 +48,18 @@ diff -Nau upstream/specs/libthruk.spec specs/libthruk.spec
  
  %build
  %{__make}
-@@ -99,5 +120,28 @@
- %attr(-,root,root) %{_libdir}/thruk
+@@ -104,7 +110,36 @@
  
  %changelog
+ * Fri Aug 22 2025 Sven Nierlein <sven.nierlein@consol.de> 3.24-1
++- now based on upstream spec 3.24
++- group changed to 42/addon/naemon
++- use git source url and save xxh128 hash in the spec file and check it
++- yumrepo-epel-thruk for perl dependencies
++
++* Fri Aug 22 2025 Sven Nierlein <sven.nierlein@consol.de> 3.24-1
+ - Migrate to use system perl modules whenever possible
+ 
 +* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.22.2-1
 +- upstream update 3.22.2
 +
