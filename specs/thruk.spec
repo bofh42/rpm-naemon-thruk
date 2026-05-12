@@ -10,32 +10,40 @@
 
 Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
-Version:       3.22.2
+Version:       3.24
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         42/addon/naemon
 
 URL:           http://thruk.org
-Source0:       https://github.com/sni/Thruk/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:       https://download.thruk.org/pkg/v%{version}/src/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 0373faab3f83402ddb9d9d41678f4a1d
+%global src0sum fd3aa66dae0d4458ea4a5b6f32fab0e7
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
+AutoReqProv:   no
 
 BuildRequires: xxhash
-BuildRequires: nodejs, npm
-BuildRequires: autoconf, automake, perl, patch
-BuildRequires: libthruk >= 2.44.2
-
-AutoReqProv:   no
+BuildRequires: make, patch
+BuildRequires: perl
+BuildRequires: perl(Module::Install)
+BuildRequires: libthruk >= 3.24
 
 Requires:      thruk-base = %{version}-%{release}
 Requires:      thruk-plugin-reporting = %{version}-%{release}
-%if 0%{?suse_version} < 1315
-Requires(pre): shadow-utils
-%endif
+
 %if 0%{?systemd_requires}
 %systemd_requires
+%endif
+
+# rhel / rocky / alma / fedora
+%if 0%{?rhel} || 0%{?rocky} || 0%{?almalinux} || 0%{?fedora}
+BuildRequires: perl-devel
+%endif
+
+# rhel / rocky / alma
+%if 0%{?rhel} || 0%{?rocky} || 0%{?almalinux}
+BuildRequires: epel-release
 %endif
 
 %description
@@ -52,47 +60,32 @@ large installations.
 %global debug_package %{nil}
 
 %package base
-Summary:     Thruk Gui Base Files
-Group:       42/addon/naemon
-Requires:    libthruk >= 2.44.2
-Requires(preun): libthruk
-Requires(post): libthruk
+Summary:         Thruk Gui Base Files
+Group:           42/addon/naemon
+AutoReqProv:     no
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
-Requires:    perl-interpreter
+Requires:        perl-interpreter
 %else
-Requires:    perl
+Requires:        perl
 %endif
-Requires:    logrotate gd wget
-AutoReqProv: no
+Requires:        logrotate  curl
+Requires:        libthruk >= 3.24
+Requires(preun): libthruk
+Requires(post):  libthruk
+
 
 #sles and opensuse
 %if %{defined suse_version}
 %if 0%{?suse_version} >= 1315
 BuildRequires: apache2
-Requires:    apache2 apache2-mod_fcgid cronie
+Requires:      apache2 apache2-mod_fcgid cronie
 %endif
-%if 0%{?suse_version} < 1315
-BuildRequires: apache2
-Requires:    apache2 apache2-mod_fcgid cron
-%endif
-%else
-BuildRequires: perl(Module::Install)
 %endif
 
-# rhel6 requirements
-%if 0%{?el6}
-BuildRequires: httpd
-BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(Time::HiRes)
-Requires: perl(Time::HiRes)
-Requires: httpd mod_fcgid cronie
-%else
-# >=rhel7 and fedora
+# >=rhel8 and fedora
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
-BuildRequires: perl(ExtUtils::Install) httpd
-Requires: httpd mod_fcgid cronie
-Requires: perl-LWP-Protocol-https
-%endif
+BuildRequires: httpd
+Requires:      httpd mod_fcgid cronie
 %endif
 
 %description base
@@ -103,11 +96,6 @@ This package contains the base files for thruk.
 Summary:     Thruk Gui Reporting Addon
 Group:       42/addon/naemon
 Requires:    %{name}-base = %{version}-%{release}
-%if %{defined suse_version}
-Requires:    xorg-x11-fonts
-%else
-Requires:    urw-fonts
-%endif
 AutoReqProv: no
 
 %description plugin-reporting
@@ -116,16 +104,7 @@ and event reporting.
 
 %prep
 echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
-%setup -q
-
-# pin npm package versions for themes buid
-sed -i \
-  -e 's|tailwindcss@latest |tailwindcss@3.4.17 |' \
-  -e 's|postcss@latest |postcss@8.4.49 |' \
-  -e 's|autoprefixer@latest |autoprefixer@10.4.20 |' \
-  -e 's|postcss-import@latest |postcss-import@16.1.0|' \
-  -e 's|@tailwindcss/forms@latest |@tailwindcss/forms@0.5.10 |' \
-  themes/themes-available/Light/Makefile
+%setup -q -n %{name}-%{version}
 
 %build
 export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
@@ -150,14 +129,6 @@ export PERL5LIB=/usr/lib/thruk/perl5:/usr/lib64/thruk/perl5
 # make sure themes are built as this point
 test -f themes/themes-available/Light/stylesheets/Light.css || %{__make} themes
 test -f themes/themes-available/Light/stylesheets/Light.css || exit 1
-
-# cleanup themes build artefacts
-rm -rf themes/themes-available/*/Makefile \
-       themes/themes-available/*/node* \
-       themes/themes-available/*/*.json \
-       themes/themes-available/*/*.js \
-       themes/themes-available/*/images/logos \
-       || :
 
 # replace /usr/bin/env according to https://fedoraproject.org/wiki/Packaging:Guidelines#Shebang_lines
 sed -e 's%/usr/bin/env perl%/usr/bin/perl%' -i \
@@ -280,6 +251,13 @@ case "$*" in
       chkconfig --add thruk
     %endif
 
+    # activate cookie in existing default ssl virtual hosts
+    for file in /etc/httpd/conf.d/ssl.conf; do
+        if test -e $file && ! grep thruk_cookie_auth.include $file >/dev/null 2>&1; then
+            sed -i -e 's|</VirtualHost>|\n    Include /usr/share/thruk/thruk_cookie_auth.include\n</VirtualHost>|g' $file
+        fi
+    done
+
     rm -rf /var/cache/thruk/*
     /usr/bin/thruk -a clearcache,installcron --local > /dev/null
 
@@ -323,6 +301,11 @@ if [ -d /tmp/thruk_update/ssi/. ]; then
   rm -f /etc/thruk/ssi/*
   cp -rp /tmp/thruk_update/ssi/* /etc/thruk/ssi/
 fi
+# deactivate cookie in existing default ssl virtual hosts
+for file in /etc/httpd/conf.d/ssl.conf; do
+  test -e $file && sed -i -e '/Include \/usr\/share\/thruk\/thruk_cookie_auth.include/d' $file
+done
+
 rm -rf /tmp/thruk_update
 exit 0
 
@@ -483,8 +466,8 @@ exit 0
 %{_datadir}/%{name}/plugins/plugins-available/editor
 %config %{_sysconfdir}/%{name}/plugins/plugins-available/editor
 %{_datadir}/%{name}/plugins/plugins-available/node-control
-%{_datadir}/%{name}/plugins/plugins-available/omd
 %config %{_sysconfdir}/%{name}/plugins/plugins-available/node-control
+%{_datadir}/%{name}/plugins/plugins-available/omd
 %config %{_sysconfdir}/%{name}/plugins/plugins-available/omd
 %config(noreplace) %{_sysconfdir}/thruk/themes
 %config(noreplace) %{_sysconfdir}/thruk/menu_local.conf
@@ -501,6 +484,7 @@ exit 0
 %attr(0755,root,root) %{_datadir}/thruk/script/pnp_export.sh
 %attr(0755,root,root) %{_datadir}/thruk/script/convert_old_datafile
 %attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest
+#attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest.sh
 %{_datadir}/thruk/support
 %{_datadir}/thruk/root
 %{_datadir}/thruk/templates
@@ -540,6 +524,10 @@ exit 0
 
 
 %changelog
+* Tue May 12 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.24-1
+- spec now based on upstream 3.26 version
+- upstream update 3.24
+
 * Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.22.2-1
 - upstream update 3.22.2
 
