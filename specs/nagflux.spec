@@ -7,6 +7,7 @@ Name:           nagflux
 Version:        0.5.8
 Release:        1%{?dist}
 Summary:        A connector which transforms performancedata from Nagios/Naemon/Icinga(2) to InfluxDB/Elasticsearch
+Group:          42/addon/naemon
 
 License:        GPLv2
 Url:            https://github.com/ConSol-Monitoring/nagflux
@@ -114,6 +115,7 @@ make test
 - removed extra files for config and systemd
 - added source0 checksum + check
 - extra source files with download url
+- added group 42/addon/naemon
 
 * Wed May 20 2026 Peter Tuschy <foss+rpm@bofh42.de> - 0.5.2-2
 - updated go dl from latest rclone spec
