@@ -1,5 +1,5 @@
---- upstream/specs/libthruk.spec	2026-05-11 23:53:35.000000000 +0200
-+++ specs/libthruk.spec	2026-05-12 10:30:21.033674417 +0200
+--- upstream/specs/libthruk.spec	2026-05-20 15:19:07.573307572 +0200
++++ specs/libthruk.spec	2026-06-17 11:10:04.052070691 +0200
 @@ -1,14 +1,18 @@
 -Summary: Thruk perl libraries
 -Name: libthruk
@@ -14,7 +14,7 @@
 -BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 +Summary:       Thruk perl libraries
 +Name:          libthruk
-+Version:       3.24
++Version:       3.26
 +Release:       1%{?dist}
 +License:       GPL-2.0-or-later
 +Group:         42/addon/naemon
@@ -22,7 +22,7 @@
 +URL:           http://www.thruk.org/
 +Source0:       https://github.com/sni/thruk_libs/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum 72d6cf46d1b691ddf2d234cfcb538cb3
++%global src0sum 8518830d457dcfa61ebd95fbecb513d7
 +
 +BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 +
@@ -48,16 +48,20 @@
  
  %build
  %{__make}
-@@ -104,7 +110,36 @@
+@@ -103,8 +109,40 @@
+ %attr(-,root,root) %{_libdir}/thruk
  
  %changelog
- * Fri Aug 22 2025 Sven Nierlein <sven.nierlein@consol.de> 3.24-1
++* Wed Jun 17 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.26-1
++- upstream update 3.26
++
++* Tue May 12 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.24-1
 +- now based on upstream spec 3.24
 +- group changed to 42/addon/naemon
 +- use git source url and save xxh128 hash in the spec file and check it
 +- yumrepo-epel-thruk for perl dependencies
 +
-+* Fri Aug 22 2025 Sven Nierlein <sven.nierlein@consol.de> 3.24-1
+ * Fri Aug 22 2025 Sven Nierlein <sven.nierlein@consol.de> 3.24-1
  - Migrate to use system perl modules whenever possible
  
 +* Tue Apr 28 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.22.2-1

@@ -1,14 +1,13 @@
---- upstream/specs/thruk.spec	2026-05-12 00:09:39.000000000 +0200
-+++ specs/thruk.spec	2026-05-12 17:01:46.467550873 +0200
-@@ -8,19 +8,22 @@
+--- upstream/specs/thruk.spec	2026-05-20 15:19:07.574307575 +0200
++++ specs/thruk.spec	2026-06-17 11:21:12.124425877 +0200
+@@ -8,23 +8,26 @@
  %define apachedir httpd
  %endif
  
 +Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
  Name:          thruk
--Version:       3.26
+ Version:       3.26
 -Release:       46.18
-+Version:       3.24
 +Release:       1%{?dist}
  License:       GPL-2.0-or-later
 -Packager:      Sven Nierlein <sven.nierlein@consol.de>
@@ -20,7 +19,7 @@
 -Source0:       %{fullname}.tar.gz
 +Source0:       https://download.thruk.org/pkg/v%{version}/src/%{name}-%{version}.tar.gz
 +# this needs to be updated for every version change
-+%global src0sum fd3aa66dae0d4458ea4a5b6f32fab0e7
++%global src0sum 5a31b018782432058cdd68d9fcc0b3a2
 +
  BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 -Group:         Applications/Monitoring
@@ -31,7 +30,12 @@
  BuildRequires: make, patch
  BuildRequires: perl
  BuildRequires: perl(Module::Install)
-@@ -58,9 +61,14 @@
+-BuildRequires: libthruk >= 3.24
++BuildRequires: libthruk >= 3.26
+ 
+ Requires:      thruk-base = %{version}-%{release}
+ Requires:      thruk-plugin-reporting = %{version}-%{release}
+@@ -58,10 +61,15 @@
  
  %package base
  Summary:         Thruk Gui Base Files
@@ -39,15 +43,17 @@
 +Group:           42/addon/naemon
  AutoReqProv:     no
 -Requires:        perl logrotate curl
+-Requires:        libthruk >= 3.24
 +%if 0%{?rhel} >= 8 || 0%{?fedora} >= 28
 +Requires:        perl-interpreter
 +%else
 +Requires:        perl
 +%endif
 +Requires:        logrotate  curl
- Requires:        libthruk >= 3.24
++Requires:        libthruk >= 3.26
  Requires(preun): libthruk
  Requires(post):  libthruk
+ 
 @@ -74,8 +82,8 @@
  %endif
  %endif
@@ -87,19 +93,13 @@
      %else
        chkconfig --add thruk
      %endif
-@@ -475,7 +484,7 @@
- %attr(0755,root,root) %{_datadir}/thruk/script/pnp_export.sh
- %attr(0755,root,root) %{_datadir}/thruk/script/convert_old_datafile
- %attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest
--%attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest.sh
-+#attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest.sh
- %{_datadir}/thruk/support
- %{_datadir}/thruk/root
- %{_datadir}/thruk/templates
-@@ -515,6 +524,41 @@
+@@ -515,6 +524,44 @@
  
  
  %changelog
++* Wed Jun 17 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.26-1
++- upstream update 3.26
++
 +* Tue May 12 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.24-1
 +- spec now based on upstream 3.26 version
 +- upstream update 3.24

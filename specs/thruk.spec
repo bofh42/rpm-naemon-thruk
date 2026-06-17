@@ -10,7 +10,7 @@
 
 Summary:       Monitoring Webinterface for Nagios/Naemon/Icinga and Shinken
 Name:          thruk
-Version:       3.24
+Version:       3.26
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         42/addon/naemon
@@ -18,7 +18,7 @@ Group:         42/addon/naemon
 URL:           http://thruk.org
 Source0:       https://download.thruk.org/pkg/v%{version}/src/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum fd3aa66dae0d4458ea4a5b6f32fab0e7
+%global src0sum 5a31b018782432058cdd68d9fcc0b3a2
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 AutoReqProv:   no
@@ -27,7 +27,7 @@ BuildRequires: xxhash
 BuildRequires: make, patch
 BuildRequires: perl
 BuildRequires: perl(Module::Install)
-BuildRequires: libthruk >= 3.24
+BuildRequires: libthruk >= 3.26
 
 Requires:      thruk-base = %{version}-%{release}
 Requires:      thruk-plugin-reporting = %{version}-%{release}
@@ -69,7 +69,7 @@ Requires:        perl-interpreter
 Requires:        perl
 %endif
 Requires:        logrotate  curl
-Requires:        libthruk >= 3.24
+Requires:        libthruk >= 3.26
 Requires(preun): libthruk
 Requires(post):  libthruk
 
@@ -484,7 +484,7 @@ exit 0
 %attr(0755,root,root) %{_datadir}/thruk/script/pnp_export.sh
 %attr(0755,root,root) %{_datadir}/thruk/script/convert_old_datafile
 %attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest
-#attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest.sh
+%attr(0755,root,root) %{_datadir}/thruk/script/check_thruk_rest.sh
 %{_datadir}/thruk/support
 %{_datadir}/thruk/root
 %{_datadir}/thruk/templates
@@ -524,6 +524,9 @@ exit 0
 
 
 %changelog
+* Wed Jun 17 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.26-1
+- upstream update 3.26
+
 * Tue May 12 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.24-1
 - spec now based on upstream 3.26 version
 - upstream update 3.24

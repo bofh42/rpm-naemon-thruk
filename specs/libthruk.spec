@@ -1,6 +1,6 @@
 Summary:       Thruk perl libraries
 Name:          libthruk
-Version:       3.24
+Version:       3.26
 Release:       1%{?dist}
 License:       GPL-2.0-or-later
 Group:         42/addon/naemon
@@ -8,7 +8,7 @@ Group:         42/addon/naemon
 URL:           http://www.thruk.org/
 Source0:       https://github.com/sni/thruk_libs/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # this needs to be updated for every version change
-%global src0sum 72d6cf46d1b691ddf2d234cfcb538cb3
+%global src0sum 8518830d457dcfa61ebd95fbecb513d7
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
 
@@ -109,6 +109,9 @@ echo "%{src0sum}  %{SOURCE0}" | xxh128sum -c
 %attr(-,root,root) %{_libdir}/thruk
 
 %changelog
+* Wed Jun 17 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.26-1
+- upstream update 3.26
+
 * Tue May 12 2026 Peter Tuschy <foss+rpm@bofh42.de> - 3.24-1
 - now based on upstream spec 3.24
 - group changed to 42/addon/naemon
